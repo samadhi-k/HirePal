@@ -1,0 +1,28 @@
+{
+  "name": "jobify",
+  "version": "1.0.0",
+  "description": "#### Track Your Job Search",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samadhi-k/jobify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samadhi-k/jobify/issues"
+  },
+  "homepage": "https://github.com/samadhi-k/jobify#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  }
+}

@@ -1,7 +1,17 @@
+ import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
+import { Dashboard, Register, Landing, Error } from "./pages";
 
 function App() {
   return (
-    <h1>HELLO WORLD</h1>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Dashboard/>}/>
+        <Route path="/register" element={<Register/>}/>
+        <Route path="/landing" element={<Landing/>}/>
+        <Route path="*" element={<Error/>}/>
+      </Routes>
+    </BrowserRouter>
+
   );
 }
 
