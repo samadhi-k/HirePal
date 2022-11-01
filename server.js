@@ -4,6 +4,7 @@ const app = express()
 import dotenv from 'dotenv';
 dotenv.config()
 
+import 'express-async-errors'
 import connectDB from "./db/connect.js";
 import authRouter from './routes/authRoutes.js'
 import jobsRouter from './routes/jobsRoutes.js'
