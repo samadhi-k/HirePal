@@ -18,9 +18,9 @@ export const initialState = {
   alertType: '',
   user: user ? JSON.parse(user) : null,
   token: token,
-  userLocation: userLocation || '',
+  userLocation: userLocation || '', 
   jobLocation: userLocation || '',
-  showSidebar: true
+  showSidebar: false
 }
 
 const AppContext = React.createContext()
@@ -59,7 +59,7 @@ const AppProvider = ({ children }) => {
       //console.log(response)
       const {user, token, location} = response.data
       
-      console.log(response)
+      //console.log(response)
 
       dispatch({
         type: REGISTER_USER_SUCCESS,
@@ -116,7 +116,11 @@ const AppProvider = ({ children }) => {
       dispatch({type: LOGOUT_USER})
       removeUserFromLocalStorage()
   }
-  
+
+  const updateUser = async (currentUser) => {
+    console.log(currentUser);
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -125,7 +129,8 @@ const AppProvider = ({ children }) => {
         registerUser,
         loginUser,
         toggleSidebar,
-        logoutUser
+        logoutUser,
+        updateUser
       }}
     >
       {children}

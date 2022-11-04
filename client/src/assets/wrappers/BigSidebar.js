@@ -17,6 +17,9 @@ const Wrapper = styled.aside`
       position: sticky;
       top: 0;
     }
+    .hide-sidebar{
+      display: none
+    }
     .show-sidebar {
       margin-left: 0;
     }
