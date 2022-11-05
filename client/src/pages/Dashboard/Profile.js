@@ -13,7 +13,11 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('updateuser');
+    if (!name || !email || !lastName || !location) {
+      displayAlert()
+      return
+    }
+    updateUser({ name, email, lastName, location })
   }
 
   return (
@@ -22,7 +26,34 @@ const Profile = () => {
         <h3>Profile</h3>
         {showAlert && <Alert/>}
         <div className="form-center">
-          <FormRow type="text" />
+          <FormRow 
+            type="text" 
+            name="name" 
+            value={name} 
+            handleChange={(e) => setName(e.target.value)}/>
+
+          <FormRow 
+            type="text" 
+            name="lastName" 
+            labelName="last name"
+            value={lastName} 
+            handleChange={(e) => setLastName(e.target.value)}/>
+
+          <FormRow 
+            type="email" 
+            name="email" 
+            value={email} 
+            handleChange={(e) => setEmail(e.target.value)}/>
+
+          <FormRow 
+            type="text" 
+            name="location" 
+            value={location} 
+            handleChange={(e) => setLocation(e.target.value)}/>
+
+          <button className='btn btn-block' type='submit' disabled={isLoading}>
+            {isLoading ? 'Please Wait...' : 'save changes'}
+          </button>
         </div>
       </form>
     </Wrapper>
