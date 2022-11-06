@@ -17,8 +17,18 @@ const Wrapper = styled.section`
     max-width: 100%;
     width: 100%;
   }
-  .form-row {
+  @media (min-width: 992px) {
+    .form-row {
     margin-bottom: 0;
+    width: 100%;
+    
+    }
+  }
+  @media (min-width: 1120px) {
+    .form-row {
+    margin-bottom: 0;
+    width: 75%; 
+  }
   }
   .form-center {
     display: grid;
@@ -34,7 +44,8 @@ const Wrapper = styled.section`
     grid-template-columns: 1fr 1fr;
     column-gap: 1rem;
     align-self: flex-end;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 2rem;
     button {
       height: 35px;
     }
@@ -58,6 +69,7 @@ const Wrapper = styled.section`
   @media (min-width: 1120px) {
     .form-center {
       grid-template-columns: 1fr 1fr 1fr;
+      
     }
     .form-center button {
       margin-top: 0;

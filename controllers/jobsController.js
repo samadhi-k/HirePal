@@ -1,8 +1,17 @@
-import Job from "../models/Job"
-import {BadRequestError, NotFoundError} from "../errors"
+import Job from "../models/Job.js"
+import {BadRequestError, NotFoundError} from "../errors/index.js"
 
 const createJob = async (req, res) => {
-    res.send('createJob')
+    const {position, company} = req.body
+
+    if(!position || !company){
+        throw new BadRequestError('Please provide all values')
+    }
+
+    req.body.createdBy = req.user.userId
+    const job = await Job.create(req.body)
+    res.status(201).json({job})
+
 }
 const getAllJobs = async (req, res) => {
     res.send('get all jobs')
