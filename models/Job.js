@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const jobSchema = new mongoose.Schema({
+const JobSchema = new mongoose.Schema({
     company: {
         type: String, 
         required:[true, 'Company is required'],
