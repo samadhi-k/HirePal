@@ -1,5 +1,5 @@
-import Job from "../models/Job"
-import {BadRequestError, NotFoundError} from "../errors"
+import Job from "../models/Job.js"
+import {BadRequestError, NotFoundError} from "../errors/index.js"
 
 const createJob = async (req, res) => {
     res.send('createJob')
