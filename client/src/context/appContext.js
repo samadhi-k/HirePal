@@ -5,8 +5,11 @@ import {DISPLAY_ALERT, CLEAR_ALERT,
         REGISTER_USER_BEGIN, REGISTER_USER_SUCCESS, REGISTER_USER_ERROR,
         LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR,
         UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
-        TOGGLE_SIDEBAR, LOGOUT_USER
-    } from "./actions";
+        TOGGLE_SIDEBAR, LOGOUT_USER,
+        HANDLE_CHANGE, CLEAR_VALUES,
+        CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, CREATE_JOB_BEGIN
+    } from "./actions.js";
+
 
 const token = localStorage.getItem('token')
 const user = localStorage.getItem('user')
@@ -21,7 +24,15 @@ export const initialState = {
   token: token,
   userLocation: userLocation || '', 
   jobLocation: userLocation || '',
-  showSidebar: false
+  showSidebar: true,
+  isEditing: false,
+  editJobId: '',
+  position: '',
+  company: '',
+  jobTypeOptions: ['full-time', 'part-time', 'remote', 'internship'],
+  jobType: 'full-time',
+  statusOptions: ['pending', 'interview', 'declined'],
+  status:'pending'
 }
 
 const AppContext = React.createContext()
@@ -32,18 +43,14 @@ const AppProvider = ({ children }) => {
   const authFetch = axios.create({
     baseURL:'/api/v1',
     headers: {
-<<<<<<< Updated upstream
     Authorization: `Bearer ${state.token}`,
   },
-=======
-      Authorization: `Bearer ${state.token}`,}
->>>>>>> Stashed changes
   })
   
 
   axios.interceptors.request.use(
     (config)=> {
-      //config.headers.common['Authorization'] = `Bearer ${state.token}`
+      config.headers.common['Authorization'] = `Bearer ${state.token}`
       return config
     },
     (error)=> {
@@ -167,6 +174,43 @@ const AppProvider = ({ children }) => {
     clearAlert()
   }
 
+  const handleChange = ({name, value}) => {
+    dispatch({
+      type: HANDLE_CHANGE,
+      payload:{name,value}
+    })
+  }
+
+  const clearValues = () => {
+    dispatch({ type: CLEAR_VALUES})
+  }
+
+  const createJob = async () => {
+    dispatch({type: CREATE_JOB_BEGIN})
+    try{
+      const {position, company, jobLocation, jobType, status} = state
+      await authFetch.post( './jobs', {
+        company,
+        position,
+        jobLocation,
+        jobType,
+        status
+      })
+      dispatch({
+        type: CREATE_JOB_SUCCESS
+      })
+      dispatch({type: CLEAR_VALUES})
+
+    } catch (e) {
+      if(e.response.status === 401) {
+        dispatch({
+          type:CREATE_JOB_ERROR,
+          payload : {msg:e.response.data.msg}})
+      }
+    }
+    clearAlert()
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -176,7 +220,10 @@ const AppProvider = ({ children }) => {
         loginUser,
         toggleSidebar,
         logoutUser,
-        updateUser
+        updateUser,
+        handleChange,
+        clearValues,
+        createJob
       }}
     >
       {children}
