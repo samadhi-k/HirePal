@@ -32,14 +32,18 @@ const AppProvider = ({ children }) => {
   const authFetch = axios.create({
     baseURL:'/api/v1',
     headers: {
+<<<<<<< Updated upstream
     Authorization: `Bearer ${state.token}`,
   },
+=======
+      Authorization: `Bearer ${state.token}`,}
+>>>>>>> Stashed changes
   })
   
 
   axios.interceptors.request.use(
     (config)=> {
-      config.headers.common['Authorization'] = `Bearer ${state.token}`
+      //config.headers.common['Authorization'] = `Bearer ${state.token}`
       return config
     },
     (error)=> {
