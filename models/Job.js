@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-const jobSchema = new mongoose.Schema({
+const JobSchema = new mongoose.Schema({
     company: {
         type: String, 
         required:[true, 'Company is required'],
-        maxlength: 20,   
+        maxlength: 50,
     },
     position: {
         type: String, 

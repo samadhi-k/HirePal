@@ -1,12 +1,15 @@
 import React, { useState, useReducer, useContext } from 'react'
-import reducer from './reducer'
+import reducer from './reducer.js'
 import axios from 'axios'
 import {DISPLAY_ALERT, CLEAR_ALERT, 
         REGISTER_USER_BEGIN, REGISTER_USER_SUCCESS, REGISTER_USER_ERROR,
         LOGIN_USER_BEGIN, LOGIN_USER_SUCCESS, LOGIN_USER_ERROR,
         UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
-        TOGGLE_SIDEBAR, LOGOUT_USER
-    } from "./actions";
+        TOGGLE_SIDEBAR, LOGOUT_USER,
+        HANDLE_CHANGE, CLEAR_VALUES,
+        CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, CREATE_JOB_BEGIN
+    } from "./actions.js";
+
 
 const token = localStorage.getItem('token')
 const user = localStorage.getItem('user')
@@ -21,21 +24,25 @@ export const initialState = {
   token: token,
   userLocation: userLocation || '', 
   jobLocation: userLocation || '',
-  showSidebar: false
+  showSidebar: true,
+  isEditing: false,
+  editJobId: '',
+  position: '',
+  company: '',
+  jobTypeOptions: ['full-time', 'part-time', 'remote', 'internship'],
+  jobType: 'full-time',
+  statusOptions: ['pending', 'interview', 'declined'],
+  status:'pending'
 }
 
-const AppContext = React.createContext()
+const AppContext = React.createContext();
+
 const AppProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(reducer,initialState)
-  
   const authFetch = axios.create({
-    baseURL:'/api/v1',
-    headers: {
-    Authorization: `Bearer ${state.token}`,
-  },
+    baseURL:'/api/v1'
   })
-  
 
   axios.interceptors.request.use(
     (config)=> {
@@ -74,7 +81,7 @@ const AppProvider = ({ children }) => {
     localStorage.setItem('location', location)
   }
 
-  const removeUserFromLocalStorage = ({user, token, location}) => {
+  const removeUserFromLocalStorage = () => {
     localStorage.removeItem('user')
     localStorage.removeItem('token')
     localStorage.removeItem('location')
@@ -85,10 +92,7 @@ const AppProvider = ({ children }) => {
     dispatch({type: REGISTER_USER_BEGIN})
     try {
       const response = await axios.post('/api/v1/auth/register', currentUser)
-      //console.log(response)
       const {user, token, location} = response.data
-      
-      //console.log(response)
 
       dispatch({
         type: REGISTER_USER_SUCCESS,
@@ -98,7 +102,6 @@ const AppProvider = ({ children }) => {
       addUserToLocalStorage({user, token, location})
 
     } catch (error) {
-      //console.log(error.response);
       dispatch({
         type:REGISTER_USER_ERROR,
         payload: {
@@ -114,18 +117,16 @@ const AppProvider = ({ children }) => {
     dispatch({type: LOGIN_USER_BEGIN})
     try {
       const {data} = await axios.post('/api/v1/auth/login', currentUser)
-      
       const {user, token, location} = data
 
       dispatch({
         type: LOGIN_USER_SUCCESS,
         payload: {user, token, location}  
       })
-      
+
       addUserToLocalStorage({user, token, location})
 
     } catch (error) {
-      //console.log(error.response);
       dispatch({
         type:LOGIN_USER_ERROR,
         payload: {
@@ -142,22 +143,61 @@ const AppProvider = ({ children }) => {
   }
 
   const logoutUser = () => {
-      dispatch({type: LOGOUT_USER})
-      removeUserFromLocalStorage()
+    dispatch({type: LOGOUT_USER})
+    removeUserFromLocalStorage()
+
   }
 
   const updateUser = async (currentUser) => {
     dispatch({type: UPDATE_USER_BEGIN})
 
     try {
-      const { data } = await authFetch.patch('/auth/updateUser', currentUser)
-      const {user, location, token} = data
 
-      dispatch({type:UPDATE_USER_SUCCESS, payload:{user, location, token}})
+      const { data } = await authFetch.patch('/auth/updateUser', currentUser)
+      const {user,token, location} = data
+
+      dispatch({type:UPDATE_USER_SUCCESS, payload:{user, token, location}})
       addUserToLocalStorage({user, location, token})
     } catch (error) {
       if( error.response.status !== 401){
         dispatch({type: UPDATE_USER_ERROR, payload:{msg:error.response.data.msg}})
+      }
+    }
+    clearAlert()
+  }
+
+  const handleChange = ({name, value}) => {
+    dispatch({
+      type: HANDLE_CHANGE,
+      payload:{name,value}
+    })
+  }
+
+  const clearValues = () => {
+    dispatch({ type: CLEAR_VALUES})
+  }
+
+  const createJob = async () => {
+    dispatch({type: CREATE_JOB_BEGIN})
+    try{
+      const {position, company, jobLocation, jobType, status} = state
+      await authFetch.post( './jobs', {
+        company,
+        position,
+        jobLocation,
+        jobType,
+        status
+      })
+      dispatch({
+        type: CREATE_JOB_SUCCESS
+      })
+      dispatch({type: CLEAR_VALUES})
+
+    } catch (e) {
+      if(e.response.status === 401) {
+        dispatch({
+          type:CREATE_JOB_ERROR,
+          payload : {msg:e.response.data.msg}})
       }
     }
     clearAlert()
@@ -172,7 +212,10 @@ const AppProvider = ({ children }) => {
         loginUser,
         toggleSidebar,
         logoutUser,
-        updateUser
+        updateUser,
+        handleChange,
+        clearValues,
+        createJob
       }}
     >
       {children}
