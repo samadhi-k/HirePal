@@ -6,6 +6,7 @@ const AddJob = () => {
   const {
     isLoading,
     isEditing,
+    editJob,
     showAlert,
     displayAlert,
     position,
@@ -27,7 +28,8 @@ const AddJob = () => {
       return
     }
     if(isEditing){
-      return;
+      editJob()
+      return
     }
     createJob()
   }
@@ -35,7 +37,7 @@ const AddJob = () => {
   const handleJobInput = (e) => {
     const name = e.target.name
     const value = e.target.value
-    handleChange({name: e.target.name, value: e.target.value})
+    handleChange({name: name, value: value})
   }
 
   return (

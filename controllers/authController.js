@@ -41,7 +41,7 @@ const login = async (req, res) => {
     }
     const token = user.createJWT()
     user.password = undefined
-    res.status(201).json({
+    res.status(200).json({
         user:{
             email: user.email,
             lastName: user.lastName,
