@@ -7,7 +7,8 @@ import {DISPLAY_ALERT, CLEAR_ALERT,
         CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, CREATE_JOB_BEGIN,
         GET_JOBS_BEGIN, GET_JOBS_SUCCESS,
         SET_EDIT_JOB, DELETE_JOB_BEGIN,
-        EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR
+        EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR, 
+        SHOW_STATS_BEGIN, SHOW_STATS_SUCCESS
      } from "./actions.js";
 
 import { initialState } from "./appContext.js";
@@ -257,6 +258,21 @@ const reducer = (state, action) => {
             showAlert: true,
             alertType:'danger',
             alertText:action.payload.msg, 
+        } 
+    }
+    if(action.type === SHOW_STATS_BEGIN){
+        return {
+            ...state, 
+            isLoading: true,
+            showAlert: false,
+        } 
+    }
+    if(action.type === SHOW_STATS_SUCCESS){
+        return {
+            ...state, 
+            isLoading: false,
+            stats: action.payload.stats,
+            monthlyApplications: action.payload.monthlyApplications
         } 
     }
 
