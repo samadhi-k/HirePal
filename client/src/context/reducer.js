@@ -8,7 +8,8 @@ import {DISPLAY_ALERT, CLEAR_ALERT,
         GET_JOBS_BEGIN, GET_JOBS_SUCCESS,
         SET_EDIT_JOB, DELETE_JOB_BEGIN,
         EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR, 
-        SHOW_STATS_BEGIN, SHOW_STATS_SUCCESS
+        SHOW_STATS_BEGIN, SHOW_STATS_SUCCESS,
+        CLEAR_FILTERS
      } from "./actions.js";
 
 import { initialState } from "./appContext.js";
@@ -275,6 +276,16 @@ const reducer = (state, action) => {
             monthlyApplications: action.payload.monthlyApplications
         } 
     }
+
+    if (action.type === CLEAR_FILTERS) {
+        return {
+          ...state,
+          search: '',
+          searchStatus: 'all',
+          searchType: 'all',
+          sort: 'latest',
+        };
+      }
 
 
     throw new Error(`no such action :${action.type}`)
