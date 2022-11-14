@@ -1,6 +1,6 @@
- import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
-import { Register, Landing, Error, ProtectedRoute } from "./pages";
- import {Stats, SharedLayout, Profile, AllJobs, AddJob} from './pages/Dashboard'
+import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
+import { Register, Landing, Error, ProtectedRoute } from "./pages/index.js";
+import {Stats, SharedLayout, Profile, AllJobs, AddJob} from './pages/Dashboard/index.js'
 
 function App() {
   return (

@@ -4,8 +4,13 @@ import {DISPLAY_ALERT, CLEAR_ALERT,
         UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
         TOGGLE_SIDEBAR, LOGOUT_USER,
         HANDLE_CHANGE, CLEAR_VALUES,
-        CREATE_JOB_BEGIN, CREATE_JOB_SUCCESS, CREATE_JOB_ERROR
-     } from "./actions";
+        CREATE_JOB_SUCCESS, CREATE_JOB_ERROR, CREATE_JOB_BEGIN,
+        GET_JOBS_BEGIN, GET_JOBS_SUCCESS,
+        SET_EDIT_JOB, DELETE_JOB_BEGIN,
+        EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR, 
+        SHOW_STATS_BEGIN, SHOW_STATS_SUCCESS,
+        CLEAR_FILTERS
+     } from "./actions.js";
 
 import { initialState } from "./appContext";
 
@@ -164,7 +169,8 @@ const reducer = (state, action) => {
             ...initialState
         } 
     }
-       
+
+
     throw new Error(`no such action :${action.type}`)
   }
 
