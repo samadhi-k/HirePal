@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useContext } from 'react'
+import React, { useReducer, useContext } from 'react'
 import reducer from './reducer'
 import axios from 'axios'
 import {DISPLAY_ALERT, CLEAR_ALERT, 
@@ -12,7 +12,7 @@ import {DISPLAY_ALERT, CLEAR_ALERT,
         SET_EDIT_JOB, DELETE_JOB_BEGIN,
         EDIT_JOB_BEGIN, EDIT_JOB_SUCCESS, EDIT_JOB_ERROR, 
         SHOW_STATS_BEGIN,SHOW_STATS_SUCCESS,
-        CLEAR_FILTERS
+        CLEAR_FILTERS, CHANGE_PAGE
     } from "./actions.js";
 
 
@@ -229,8 +229,8 @@ const AppProvider = ({ children }) => {
   }
 
   const getJobs = async () => {
-    const { search, searchStatus, searchType, sort } = state;
-    let url = `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
+    const { page,search, searchStatus, searchType, sort } = state;
+    let url = `/jobs?pages=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
     if (search) {
       url = url + `&search=${search}`;
     }
@@ -313,6 +313,10 @@ const AppProvider = ({ children }) => {
     dispatch({ type: CLEAR_FILTERS });
   }
 
+  const changePage = (page) => {
+    dispatch({type: CHANGE_PAGE, payload: {page}})
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -331,7 +335,8 @@ const AppProvider = ({ children }) => {
         deleteJob,
         editJob,
         showStats,
-        clearFilters
+        clearFilters,
+        changePage
       }}
     >
       {children}
