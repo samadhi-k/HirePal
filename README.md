@@ -32,6 +32,8 @@ const getAllJobs = async (req, res) => {
     result = result.sort('-position')
   }
 
+  
+
   const totalJobs = await result
 
   // setup pagination
